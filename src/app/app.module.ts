@@ -21,8 +21,11 @@ import {SearchComponent} from "./components/search/search.component";
 import {AboutComponent} from "./components/about/about.component";
 import {ArtistComponent} from "./components/artist/artist.component";
 import {AlbumComponent} from "./components/album/album.component";
+import {TrackComponent} from "./components/track/track.component";
 
 import { SpotifyService } from './services/spotify.service';
+import { FilterPipe } from "./app.filter.pipe";
+import {MSPipe} from "./app.ms-to-minute.pipe";
 
 
 // Application wide providers
@@ -36,7 +39,7 @@ const APP_PROVIDERS = [
  */
 @NgModule({
   bootstrap: [ AppComponent ],
-  declarations: [ AppComponent, NavbarComponent, SearchComponent, AboutComponent, ArtistComponent, AlbumComponent ],
+  declarations: [ AppComponent, NavbarComponent, SearchComponent, AboutComponent, ArtistComponent, AlbumComponent, FilterPipe, TrackComponent, MSPipe ],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,

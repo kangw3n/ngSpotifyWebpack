@@ -44,6 +44,35 @@ exports.AppComponent = AppComponent;
 
 /***/ },
 
+/***/ "./src/app/app.filter.pipe.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var FilterPipe = (function () {
+    function FilterPipe() {
+    }
+    FilterPipe.prototype.transform = function (items, term) {
+        if (term === undefined)
+            return items;
+        return items.filter(function (item) {
+            return item.name.toLowerCase().includes(term.toLowerCase());
+        });
+    };
+    FilterPipe = __decorate([
+        core_1.Pipe({
+            name: 'filter'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], FilterPipe);
+    return FilterPipe;
+}());
+exports.FilterPipe = FilterPipe;
+
+
+/***/ },
+
 /***/ "./src/app/app.module.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -69,7 +98,10 @@ var search_component_1 = __webpack_require__("./src/app/components/search/search
 var about_component_1 = __webpack_require__("./src/app/components/about/about.component.ts");
 var artist_component_1 = __webpack_require__("./src/app/components/artist/artist.component.ts");
 var album_component_1 = __webpack_require__("./src/app/components/album/album.component.ts");
+var track_component_1 = __webpack_require__("./src/app/components/track/track.component.ts");
 var spotify_service_1 = __webpack_require__("./src/app/services/spotify.service.ts");
+var app_filter_pipe_1 = __webpack_require__("./src/app/app.filter.pipe.ts");
+var app_ms_to_minute_pipe_1 = __webpack_require__("./src/app/app.ms-to-minute.pipe.ts");
 // Application wide providers
 var APP_PROVIDERS = app_resolver_1.APP_RESOLVER_PROVIDERS.concat([
     app_service_1.AppState
@@ -107,7 +139,7 @@ var AppModule = (function () {
     AppModule = __decorate([
         core_1.NgModule({
             bootstrap: [app_component_1.AppComponent],
-            declarations: [app_component_1.AppComponent, navbar_component_1.NavbarComponent, search_component_1.SearchComponent, about_component_1.AboutComponent, artist_component_1.ArtistComponent, album_component_1.AlbumComponent],
+            declarations: [app_component_1.AppComponent, navbar_component_1.NavbarComponent, search_component_1.SearchComponent, about_component_1.AboutComponent, artist_component_1.ArtistComponent, album_component_1.AlbumComponent, app_filter_pipe_1.FilterPipe, track_component_1.TrackComponent, app_ms_to_minute_pipe_1.MSPipe],
             imports: [
                 platform_browser_1.BrowserModule,
                 forms_1.FormsModule,
@@ -127,6 +159,42 @@ var AppModule = (function () {
     var _a, _b;
 }());
 exports.AppModule = AppModule;
+
+
+/***/ },
+
+/***/ "./src/app/app.ms-to-minute.pipe.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var MSPipe = (function () {
+    function MSPipe() {
+    }
+    MSPipe.prototype.transform = function (millseconds, term) {
+        var seconds = Math.floor(millseconds / 1000);
+        var days = Math.floor(seconds / 86400);
+        var hours = Math.floor((seconds % 86400) / 3600);
+        var minutes = Math.floor(((seconds % 86400) % 3600) / 60);
+        var timeString = '';
+        if (days > 0)
+            timeString += (days > 1) ? (days + " days ") : (days + " day ");
+        if (hours > 0)
+            timeString += (hours > 1) ? (hours + " hours ") : (hours + " hour ");
+        if (minutes >= 0)
+            timeString += (minutes > 1) ? (minutes + " minutes ") : (minutes + " minute ");
+        return timeString;
+    };
+    MSPipe = __decorate([
+        core_1.Pipe({
+            name: 'msMinute'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MSPipe);
+    return MSPipe;
+}());
+exports.MSPipe = MSPipe;
 
 
 /***/ },
@@ -173,11 +241,13 @@ var search_component_1 = __webpack_require__("./src/app/components/search/search
 var about_component_1 = __webpack_require__("./src/app/components/about/about.component.ts");
 var artist_component_1 = __webpack_require__("./src/app/components/artist/artist.component.ts");
 var album_component_1 = __webpack_require__("./src/app/components/album/album.component.ts");
+var track_component_1 = __webpack_require__("./src/app/components/track/track.component.ts");
 exports.ROUTES = [
     { path: '', component: search_component_1.SearchComponent },
     { path: 'about', component: about_component_1.AboutComponent },
     { path: 'artist/:id', component: artist_component_1.ArtistComponent },
-    { path: 'album/:id', component: album_component_1.AlbumComponent }
+    { path: 'album/:id', component: album_component_1.AlbumComponent },
+    { path: 'top-tracks/:id', component: track_component_1.TrackComponent }
 ];
 
 
@@ -310,7 +380,7 @@ exports.AlbumComponent = AlbumComponent;
 /***/ "./src/app/components/artist/artist.component.html":
 /***/ function(module, exports) {
 
-module.exports = "<div *ngIf=\"artist\">\n  <header class=\"artist-header\">\n    <div *ngIf=\"artist.images.length > 0\">\n      <img src=\"{{artist.images[0].url}}\" class=\"artist-thumb img-circle\" alt=\"\">\n    </div>\n    <h1>{{artist.name}}</h1>\n    <p *ngIf=\"artist.genres.length > 0\">\n      Genres: <span *ngFor=\"let genres of artist.genres\">{{genres}}</span>\n    </p>\n  </header>\n\n  <div class=\"artist-albums\">\n    <div class=\"row flexy\">\n\n      <div class=\"col-md-3 well\" *ngFor=\"let album of albums\">\n        <div class=\"album\" *ngIf=\"album.images.length > 0\">\n\n          <img class=\"album-thumb img-thumbnail\" src=\"{{album.images[0].url}}\" alt=\"\">\n          <h4>{{album.name}}</h4>\n          <a routerLink=\"/album/{{album.id}}\" class=\"btn btn-default btn-block\">Album Details</a>\n\n        </div>\n      </div>\n\n\n    </div>\n  </div>\n\n</div>\n"
+module.exports = "<div *ngIf=\"artist\">\n\t<header class=\"artist-header clearfix\">\n\n\t\t<h1>\n\t    <span *ngIf=\"artist.images.length > 0\">\n\t\t    <img src=\"{{artist.images[0].url}}\" class=\"artist-thumb img-circle\" alt=\"\">\n\t    </span>\n\t\t\t{{artist.name}}\n\t\t</h1>\n\t\t<p *ngIf=\"artist.genres.length > 0\">\n\t\t\tGenres: <span *ngFor=\"let genres of artist.genres\">{{genres}}</span>\n\t\t</p>\n\t\t<div class=\"col-md-3 col-md-offset-1\">\n\t\t\t<a routerLink=\"/top-tracks/{{artist.id}}\" class=\"btn btn-success\">View all Tracks</a>\n\t\t</div>\n\t</header>\n\n\t<form id=\"albumFilter\">\n\t\t<div class=\"form-group\">\n\t\t\t<label class=\"control-label\" for=\"inputDefault\">Filter Album</label>\n\t\t\t<input type=\"text\" [(ngModel)]=\"term\" name=\"albumFilter\" class=\"form-control\" id=\"inputDefault\">\n\t\t</div>\n\t</form>\n\n\t<div class=\"artist-albums\">\n\t\t<div class=\"row flexy\">\n\n\t\t\t<div class=\"col-md-3 well\" *ngFor=\"let album of albums | filter:term \">\n\t\t\t\t<div class=\"album\" *ngIf=\"album.images.length > 0\">\n\n\t\t\t\t\t<img class=\"album-thumb img-thumbnail\" src=\"{{album.images[0].url}}\" alt=\"\">\n\t\t\t\t\t<h4>{{album.name}}</h4>\n\t\t\t\t\t<a routerLink=\"/album/{{album.id}}\" class=\"btn btn-default btn-block\">Album Details</a>\n\n\t\t\t\t</div>\n\t\t\t</div>\n\n\n\t\t</div>\n\t</div>\n\n</div>\n"
 
 /***/ },
 
@@ -430,6 +500,57 @@ exports.SearchComponent = SearchComponent;
 
 /***/ },
 
+/***/ "./src/app/components/track/track.component.html":
+/***/ function(module, exports) {
+
+module.exports = "<div id=\"track\" *ngIf=\"artist\">\r\n\t<header class=\"album-header\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4\">\r\n\t\t\t\t<div *ngIf=\"artist.images.length > 0\">\r\n\t\t\t\t\t<img src=\"{{artist.images[0].url}}\" class=\"album-thumb\" alt=\"\">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"col-md-8\">\r\n\t\t\t\t<h2>{{artist.name}}</h2>\r\n\t\t\t\t<h4>Follower: {{artist.followers.total}}</h4>\r\n\t\t\t\t<h5>Popularity: {{artist.popularity}}</h5>\r\n\t\t\t\t<a href=\"{{artist.external_urls.spotify}}\" target=\"_blank\" class=\"btn btn-primary\">View Artist In Spotify</a>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</header>\r\n\r\n\t<div class=\"album-tracks\">\r\n\t\t<h2>Album Tracks</h2>\r\n\t\t<div *ngFor=\"let track of tracks\">\r\n\t\t\t<div class=\"well\">\r\n\t\t\t\t<div class=\"row\">\r\n\t\t\t\t\t<div class=\"col-md-2\">\r\n\t\t\t\t\t\t<img class=\"album-thumb\" src=\"{{track.album.images[0].url}}\" alt=\"\">\r\n\t\t\t\t\t\t<span>{{track.album.name}}</span><br>\r\n\t\t\t\t\t\t<a routerLink=\"/album/{{track.album.id}}\" >View Album </a>\r\n\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"col-md-10\">\r\n\t\t\t\t\t\t<h4>{{track.name}} </h4>\r\n\t\t\t\t\t\t<a href=\"{{track.preview_url}}\" target=\"_blank\" class=\"btn btn-primary\">Preview Track</a>\r\n\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t{{track.duration_ms | msMinute}} - \tPopularity: {{track.popularity}} <br>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/components/track/track.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var spotify_service_1 = __webpack_require__("./src/app/services/spotify.service.ts");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var TrackComponent = (function () {
+    function TrackComponent(_spotifyService, _route) {
+        this._spotifyService = _spotifyService;
+        this._route = _route;
+    }
+    TrackComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this._route.params
+            .map(function (params) { return params['id']; })
+            .subscribe(function (id) {
+            _this._spotifyService.getTopTracks(id)
+                .subscribe(function (track) {
+                _this.tracks = track.tracks;
+            });
+            _this._spotifyService.getArtist(id)
+                .subscribe(function (artist) {
+                _this.artist = artist;
+            });
+        });
+    };
+    TrackComponent = __decorate([
+        core_1.Component({
+            moduleId: module.i,
+            selector: 'tracks',
+            template: __webpack_require__("./src/app/components/track/track.component.html")
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof spotify_service_1.SpotifyService !== 'undefined' && spotify_service_1.SpotifyService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object])
+    ], TrackComponent);
+    return TrackComponent;
+    var _a, _b;
+}());
+exports.TrackComponent = TrackComponent;
+
+
+/***/ },
+
 /***/ "./src/app/environment.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -497,7 +618,7 @@ var SpotifyService = (function () {
     }
     SpotifyService.prototype.searchMusic = function (str, type) {
         if (type === void 0) { type = 'artist'; }
-        this.searchUrl = "https://api.spotify.com/v1/search?query=" + str + "&offset=0&limit=20&type=" + type + "&market=US";
+        this.searchUrl = "https://api.spotify.com/v1/search?query=" + str + "&offset=0&limit=20&type=" + type + "&market=";
         return this._http.get(this.searchUrl)
             .map(function (res) { return res.json(); });
     };
@@ -514,6 +635,11 @@ var SpotifyService = (function () {
     SpotifyService.prototype.getAlbum = function (id) {
         this.albumUrl = "https://api.spotify.com/v1/albums/" + id;
         return this._http.get(this.albumUrl)
+            .map(function (res) { return res.json(); });
+    };
+    SpotifyService.prototype.getTopTracks = function (id) {
+        this.tracksUrl = "https://api.spotify.com/v1/artists/" + id + "/top-tracks?country=TW";
+        return this._http.get(this.tracksUrl)
             .map(function (res) { return res.json(); });
     };
     SpotifyService = __decorate([
