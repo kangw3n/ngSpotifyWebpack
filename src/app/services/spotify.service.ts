@@ -15,7 +15,7 @@ export class SpotifyService {
   }
 
   searchMusic(str: string, type = 'artist') {
-    this.searchUrl = `https://api.spotify.com/v1/search?query=${str}&offset=0&limit=20&type=${type}&market=`;
+    this.searchUrl = `https://api.spotify.com/v1/search?query=${str}&offset=0&limit=20&type=${type}&market0=TW`;
     return this._http.get(this.searchUrl)
       .map(res => res.json());
   }

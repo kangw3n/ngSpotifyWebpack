@@ -1,1 +1,9 @@
-About
+<h2>{{ (_about | async)?.title }}</h2>
+
+<p>{{ (_about | async)?.value }}</p>
+
+<ul>
+	<li *ngFor="let list of _aboutList | async">
+		{{ list.name }}
+	</li>
+</ul>

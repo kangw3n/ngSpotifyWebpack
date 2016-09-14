@@ -1,6 +1,6 @@
-<h1>Need Music?</h1>
+<h1>{{ (_search | async)?.title }}</h1>
 <div class="lead">
-  Use Spotify to listen music!
+	{{ (_search | async)?.text }}
 </div>
 
 <form>

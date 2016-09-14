@@ -27,6 +27,18 @@ import { SpotifyService } from './services/spotify.service';
 import { FilterPipe } from "./app.filter.pipe";
 import {MSPipe} from "./app.ms-to-minute.pipe";
 
+import {AngularFireModule} from 'angularfire2';
+
+
+
+// Initialize Firebase
+export const firebaseConfig = {
+  apiKey: "AIzaSyAuice6zlwggtiwohsh9LRtaOS0l-Q7EnY",
+  authDomain: "ngspotify-17272.firebaseapp.com",
+  databaseURL: "https://ngspotify-17272.firebaseio.com",
+  storageBucket: "",
+};
+
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -45,12 +57,13 @@ const APP_PROVIDERS = [
     FormsModule,
     HttpModule,
     JsonpModule,
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES),
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
-    SpotifyService
+    SpotifyService,
   ]
 })
 export class AppModule {
