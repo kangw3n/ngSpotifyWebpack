@@ -37,9 +37,8 @@ module.exports = {
     /** <link> tags for a Web App Manifest **/
     { rel: 'manifest', href: '/assets/manifest.json' },
 
-    { rel: 'stylesheet', href: 'https://bootswatch.com/cyborg/bootstrap.css'},
-    { rel: 'stylesheet', href: '/assets/css/styles.css'}
-
+		{ rel: 'stylesheet', href: 'https://bootswatch.com/cyborg/bootstrap.css'},
+		{ rel: 'stylesheet', href: '/assets/css/styles.css'}
   ],
   meta: [
     { name: 'msapplication-TileColor', content: '#00bcd4' },
