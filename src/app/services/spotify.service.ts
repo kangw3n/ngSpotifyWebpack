@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Http, Headers} from '@angular/http';
-import 'rxjs/add/operator/map';
+import {Injectable} from "@angular/core";
+import {Http} from "@angular/http";
+import "rxjs/add/operator/map";
 
 @Injectable()
 export class SpotifyService {
@@ -9,6 +9,7 @@ export class SpotifyService {
   private albumsUrl: string;
   private albumUrl: string;
   private tracksUrl: string;
+  private trackurl: string;
 
   constructor(private _http: Http) {
 
@@ -17,7 +18,8 @@ export class SpotifyService {
   searchMusic(str: string, type = 'artist') {
     this.searchUrl = `https://api.spotify.com/v1/search?query=${str}&offset=0&limit=20&type=${type}&market0=TW`;
     return this._http.get(this.searchUrl)
-      .map(res => res.json());
+      .map(res => res.json())
+      // .catch(err => console.warn(err))
   }
 
   getArtist(id: string) {
@@ -41,6 +43,12 @@ export class SpotifyService {
   getTopTracks(id: string) {
     this.tracksUrl = `https://api.spotify.com/v1/artists/${id}/top-tracks?country=TW`;
     return this._http.get(this.tracksUrl)
+      .map(res => res.json());
+  }
+
+  getTrack(id: string) {
+    this.trackurl = `https://api.spotify.com/v1/tracks/${id}`;
+    return this._http.get(this.trackurl)
       .map(res => res.json());
   }
 }

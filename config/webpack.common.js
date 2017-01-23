@@ -20,7 +20,7 @@ const AssetsPlugin = require('assets-webpack-plugin');
  */
 const HMR = helpers.hasProcessFlag('hot');
 const METADATA = {
-  title: 'Angular2 Webpack Starter by @gdi2290 from @AngularClass',
+  title: 'ngWebpackSpotify',
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer()
 };

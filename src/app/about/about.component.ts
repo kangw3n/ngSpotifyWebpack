@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 console.log('`About` component loaded asynchronously');
 
 @Component({
-  selector: 'about',
+  selector: 'about2',
   styles: [`
   `],
   template: `

@@ -22,6 +22,9 @@ import {AboutComponent} from "./components/about/about.component";
 import {ArtistComponent} from "./components/artist/artist.component";
 import {AlbumComponent} from "./components/album/album.component";
 import {TrackComponent} from "./components/track/track.component";
+import {SingleTrackComponent} from './components/single/single.component';
+import {About} from './about/about.component';
+
 
 import { SpotifyService } from './services/spotify.service';
 import { FilterPipe } from "./app.filter.pipe";
@@ -51,7 +54,7 @@ const APP_PROVIDERS = [
  */
 @NgModule({
   bootstrap: [ AppComponent ],
-  declarations: [ AppComponent, NavbarComponent, SearchComponent, AboutComponent, ArtistComponent, AlbumComponent, FilterPipe, TrackComponent, MSPipe ],
+  declarations: [ AppComponent, NavbarComponent, SearchComponent, AboutComponent, ArtistComponent, AlbumComponent, SingleTrackComponent, FilterPipe, TrackComponent, MSPipe, About],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
